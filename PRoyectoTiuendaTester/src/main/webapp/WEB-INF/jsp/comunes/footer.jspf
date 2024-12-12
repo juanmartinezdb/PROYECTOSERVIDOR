@@ -1,0 +1,6 @@
+<footer class="container-fluid bg-dark text-light p-2 mt-3" style="border-top:2px solid #444;">
+    <p class="text-center" style="margin:0; font-family:'Courier New', monospace; font-size:12px;">
+        Creado por Juan Martinez© 2024
+    </p>
+</footer>
+<%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>

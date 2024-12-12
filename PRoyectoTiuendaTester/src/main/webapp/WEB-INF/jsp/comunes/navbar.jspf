@@ -1,0 +1,55 @@
+<%@page import="juan.proyectotienda.model.Usuario"%>
+<%
+    Usuario userlog = (Usuario) session.getAttribute("usuario");
+    boolean isAdmin = false;
+    if (userlog != null && "admin".equals(userlog.getRol())) {
+        isAdmin = true;
+    }
+%>
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-secondary" style="border-bottom:2px solid #444;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="<%=request.getContextPath()%>/">[LOGO]</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommon"
+                aria-controls="navbarCommon" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCommon">
+            <ul class="navbar-nav me-auto mb-2 mb-sm-0" style="font-family:'Courier New', monospace;">
+                <li class="nav-item">
+                    <a class="nav-link" href="<%=request.getContextPath()%>/ventas">Ventas</a>
+                </li>
+                <%
+                    if (isAdmin) {
+                %>
+                <li class="nav-item">
+                    <a class="nav-link" href="<%=request.getContextPath()%>/back/categorias">Back</a>
+                </li>
+                <%
+                    }
+                %>
+                <li class="nav-item">
+                    <a class="nav-link" href="<%=request.getContextPath()%>/carrito">Carrito</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center" style="font-family:'Courier New', monospace;">
+                <%
+                    if (userlog != null) {
+                %>
+                <span class="text-light me-2">Hola, <%=userlog.getNombre()%></span>
+                <form action="<%=request.getContextPath()%>/login?accion=logout" method="post" class="d-inline">
+                    <input type="submit" value="Logout" class="btn btn-sm btn-danger"/>
+                </form>
+                <%
+                } else {
+                %>
+                <a class="btn btn-sm btn-outline-light me-2" href="<%=request.getContextPath()%>/registro">Registrarse</a>
+                <a class="btn btn-sm btn-outline-light" href="<%=request.getContextPath()%>/login">Login</a>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+</nav>
