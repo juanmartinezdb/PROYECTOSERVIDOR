@@ -100,8 +100,8 @@ INSERT INTO producto (nombre, descripcion, precio, imagen, idCategoria) VALUES
 ('Lacasitos Tubo', 'Lentejas de chocolate', 1.00, '10.jpg', 4);
 
 INSERT INTO usuario (nombre, password, rol) VALUES
-('Juan', '5e884898da28047151d0e56f8dc6292773603cd0d6aabbddf91a5fb1e4110839', 'admin'),
-('Ricardo', '5e884898da28047151d0e56f8dc6292773603cd0d6aabbddf91a5fb1e4110839', 'admin'),
-('Zahira', '5e884898da28047151d0e56f8dc6292773603cd0d6aabbddf91a5fb1e4110839', 'cliente'),
-('David', '5e884898da28047151d0e56f8dc6292773603cd0d6aabbddf91a5fb1e4110839', 'cliente'),
-('Aroha', '5e884898da28047151d0e56f8dc6292773603cd0d6aabbddf91a5fb1e4110839', 'cliente');
+('Juan', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'admin'),
+('Ricardo', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'admin'),
+('Zahira', 'a60b85d409a01d46023f90741e01b79543a3cb1ba048eaefbe5d7a63638043bf', 'cliente'),
+('David', 'a60b85d409a01d46023f90741e01b79543a3cb1ba048eaefbe5d7a63638043bf', 'cliente'),
+('Aroha', 'a60b85d409a01d46023f90741e01b79543a3cb1ba048eaefbe5d7a63638043bf', 'cliente');
