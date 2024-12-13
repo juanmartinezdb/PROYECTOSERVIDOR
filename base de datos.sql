@@ -76,16 +76,16 @@ INSERT INTO producto (nombre, descripcion, precio, imagen, idCategoria) VALUES
 ('Café Americano', 'Café largo suave', 1.50, '10.jpg', 2);
 
 INSERT INTO producto (nombre, descripcion, precio, imagen, idCategoria) VALUES
-('Patatas Fritas Bolsa', 'Patatas fritas clásicas 50g', 1.00, '1.jpg', 3),
-('Patatas Sabor Jamón', 'Patatas fritas sabor jamón 50g', 1.00, '2.jpg', 3),
-('Quicos', 'Maíz frito crujiente 50g', 1.20, '3.jpg', 3),
-('Pipas Saladas', 'Pipas de girasol saladas 50g', 1.00, '4.jpg', 3),
-('Cacahuetes', 'Cacahuetes tostados 50g', 1.20, '5.jpg', 3),
-('Mix Frutos Secos', 'Mezcla de frutos secos 50g', 1.50, '6.jpg', 3),
-('Patatas Sabor Queso', 'Patatas fritas sabor queso 50g', 1.00, '7.jpg', 3),
-('Torreznos', 'Snacks crujientes de panceta 30g', 1.50, '8.jpg', 3),
-('Almendras Saladas', 'Almendras tostadas saladas 50g', 1.50, '9.jpg', 3),
-('Gusanitos', 'Snacks de maíz sabor queso 50g', 1.00, '10.jpg', 3);
+('Patatas Fritas Bolsa', 'Patatas fritas clásicas 150g', 1.00, '1.jpg', 3),
+('Patatas Sabor Jamón', 'Patatas fritas sabor jamón 150g', 1.00, '2.jpg', 3),
+('Quicos', 'Maíz frito crujiente 160g', 1.20, '3.jpg', 3),
+('Pipas Saladas', 'Pipas de girasol saladas 120g', 1.00, '4.jpg', 3),
+('Cacahuetes', 'Cacahuetes tostados 400g', 3.20, '5.jpg', 3),
+('Mix Frutos Secos', 'Mezcla de frutos secos 195g', 1.50, '6.jpg', 3),
+('Patatas Sabor Queso', 'Patatas fritas sabor queso 150g', 1.00, '7.jpg', 3),
+('Torreznos', 'Snacks crujientes de panceta 75g', 1.50, '8.jpg', 3),
+('Almendras Saladas', 'Almendras tostadas saladas 128g', 1.50, '9.jpg', 3),
+('Gusanitos', 'Snacks de maíz sabor queso 105g', 1.00, '10.jpg', 3);
 
 INSERT INTO producto (nombre, descripcion, precio, imagen, idCategoria) VALUES
 ('KitKat', 'Barrita de chocolate con barquillo', 1.20, '1.jpg', 4),
