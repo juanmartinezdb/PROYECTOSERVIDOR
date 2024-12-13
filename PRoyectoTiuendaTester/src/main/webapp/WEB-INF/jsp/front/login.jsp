@@ -5,16 +5,15 @@
     <meta charset="UTF-8">
     <title>Login - Tienda Digital</title>
     <%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <%@ include file="/WEB-INF/jsp/comunes/css.jspf" %>
 </head>
 <body class="d-flex flex-column vh-100">
 
 <%@ include file="/WEB-INF/jsp/comunes/header.jspf" %>
 <%@ include file="/WEB-INF/jsp/comunes/navbar.jspf" %>
 
-<div class="container mt-5" style="max-width:400px;">
-    <h2 class="mb-3" style="font-family:'Courier New', monospace;">Iniciar Sesión</h2>
+<div class="container mt-5 flex-grow-1 " style="max-width:400px;">
+    <h2 class="mb-3">Iniciar Sesión</h2>
     <form action="<%=request.getContextPath()%>/login" method="post">
         <div class="mb-3">
             <label class="form-label">Usuario:</label>

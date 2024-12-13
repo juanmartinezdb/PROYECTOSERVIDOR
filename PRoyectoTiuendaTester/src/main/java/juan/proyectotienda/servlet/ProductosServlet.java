@@ -51,7 +51,7 @@ public class ProductosServlet extends HttpServlet {
                     int id = Integer.parseInt(parts[1]);
                     Optional<Producto> prod = productoDAO.find(id);
                     if (prod.isPresent()) {
-                        request.setAttribute("producto", prod);
+                        request.setAttribute("producto", prod.get());
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/detalle-producto.jsp");
                     } else {
                         response.sendRedirect(request.getContextPath() + "/back/productos");
@@ -70,7 +70,7 @@ public class ProductosServlet extends HttpServlet {
                     if (prod.isPresent()) {
                         List<Categoria> categorias = categoriaDAO.getAll();
                         request.setAttribute("listaCategorias", categorias);
-                        request.setAttribute("producto", prod);
+                        request.setAttribute("producto", prod.get());
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/editar-producto.jsp");
                     } else {
                         response.sendRedirect(request.getContextPath() + "/back/productos");

@@ -43,7 +43,7 @@ public class CategoriasServlet extends HttpServlet {
                     int id = Integer.parseInt(parts[1]);
                     Optional<Categoria> cat = categoriaDAO.find(id);
                     if (cat.isPresent()) {
-                        request.setAttribute("categoria", cat);
+                        request.setAttribute("categoria", cat.get());
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/categorias/detalle-categoria.jsp");
                     } else {
                         response.sendRedirect(request.getContextPath() + "/back/categorias");
@@ -60,7 +60,7 @@ public class CategoriasServlet extends HttpServlet {
                     int id = Integer.parseInt(parts[2]);
                     Optional<Categoria> cat = categoriaDAO.find(id);
                     if (cat.isPresent()) {
-                        request.setAttribute("categoria", cat);
+                        request.setAttribute("categoria", cat.get());
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/categorias/editar-categoria.jsp");
                     } else {
                         response.sendRedirect(request.getContextPath() + "/back/categorias");

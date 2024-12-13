@@ -1,7 +1,6 @@
-<div class="container-fluid bg-dark text-light py-2" style="border-bottom:2px solid #555; font-family:'Courier New', monospace;">
-    <a class="text-light me-3" style="text-decoration:none;" href="<%=request.getContextPath()%>/back/categorias">Categorías</a>
-    <a class="text-light me-3" style="text-decoration:none;" href="<%=request.getContextPath()%>/back/productos">Productos</a>
-    <a class="text-light me-3" style="text-decoration:none;" href="<%=request.getContextPath()%>/back/usuarios">Usuarios</a>
-    <a class="text-light me-3" style="text-decoration:none;" href="<%=request.getContextPath()%>/back/pedidos">Pedidos</a>
+<div class="container-fluid backbar">
+    <a class="btn btn-outline-dark me-2" href="<%=request.getContextPath()%>/back/categorias">Categorias</a>
+    <a class="btn btn-outline-dark me-2" href="<%=request.getContextPath()%>/back/productos">Productos</a>
+    <a class="btn btn-outline-dark me-2" href="<%=request.getContextPath()%>/back/usuarios">Usuarios</a>
+    <a class="btn btn-outline-dark me-2" href="<%=request.getContextPath()%>/back/pedidos">Pedidos</a>
 </div>
-<%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>

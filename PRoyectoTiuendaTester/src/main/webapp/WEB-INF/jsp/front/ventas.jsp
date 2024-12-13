@@ -8,8 +8,7 @@
     <meta charset="UTF-8">
     <title>Ventas - Tienda Digital</title>
     <%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <%@ include file="/WEB-INF/jsp/comunes/css.jspf" %>
 </head>
 <body class="d-flex flex-column vh-100">
 
@@ -21,14 +20,16 @@
     List<Producto> listaProductos = (List<Producto>) request.getAttribute("listaProductos");
 %>
 
-<div class="container-fluid bg-dark text-light py-2" style="font-family:'Courier New', monospace;">
+<div class="container-fluid">
     <div class="d-flex flex-wrap">
-        <a href="<%=request.getContextPath()%>/ventas" class="text-light text-decoration-none me-3">Todas</a>
+        <a href="<%=request.getContextPath()%>/ventas" class="btn btn-outline-primary me-2">Todas</a>
         <%
             if (listaCategorias != null) {
                 for (Categoria c : listaCategorias) {
         %>
-        <a href="<%=request.getContextPath()%>/ventas/<%=c.getIdCategoria()%>" class="text-light text-decoration-none me-3"><%= c.getNombre() %></a>
+        <a href="<%=request.getContextPath()%>/ventas/<%=c.getIdCategoria()%>" class="btn btn-outline-primary me-2">
+            <%= c.getNombre() %>
+        </a>
         <%
                 }
             }
@@ -36,26 +37,40 @@
     </div>
 </div>
 
-<div class="container flex-grow-1 mt-3">
+<div class="container mt-3 flex-grow-1 ">
     <div class="row">
         <%
             if (listaProductos != null && !listaProductos.isEmpty()) {
-                for (Producto p : listaProductos) {
+            int catSelect = 0;
+            %>
+
+        <% if (listaProductos.get(0).getIdCategoria()!=listaProductos.get(listaProductos.size() - 1).getIdCategoria()){ %>
+        <h2>Todas</h2>
+<%} else {
+    catSelect = listaProductos.get(0).getIdCategoria();
+%>
+        <h2><%=listaCategorias.get(catSelect-1).getNombre()%></h2>
+        <%} for (Producto p : listaProductos) {
         %>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="card h-100" style="border:2px solid #444;">
-                <% if(p.getImagen() != null && !p.getImagen().isEmpty()) { %>
-                <img src="<%=request.getContextPath()%>/images/<%=p.getImagen()%>" class="card-img-top" alt="<%=p.getNombre()%>">
-                <% } %>
-                <div class="card-body">
-                    <h5 class="card-title" style="font-family:'Courier New', monospace;"><%=p.getNombre()%></h5>
-                    <p class="card-text"><%=p.getDescripcion()%></p>
-                    <p class="card-text text-success"><strong><%=p.getPrecio()%> €</strong></p>
-                    <form action="<%=request.getContextPath()%>/ventas" method="post" class="d-flex align-items-center">
-                        <input type="hidden" name="idProducto" value="<%=p.getIdProducto()%>"/>
-                        <input type="number" name="cantidad" value="1" min="1" class="form-control me-2" style="width:80px;"/>
-                        <button type="submit" class="btn btn-sm btn-primary">Añadir</button>
-                    </form>
+            <div class="card h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column justify-content-between">
+                <img src="<%=request.getContextPath()%>/imagenes/<%=p.getImagen()%>" class="" alt="<%=p.getNombre()%>">
+                    <div>
+                        <h5 class="card-title mt-2"><%=p.getNombre()%></h5>
+                        <p class="card-text"><%=p.getDescripcion()%></p>
+                    </div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <p class="card-text text-success mb-0">
+                            <strong><%=p.getPrecio()%> €</strong>
+                        </p>
+                        <form action="<%=request.getContextPath()%>/ventas" method="post" class="d-flex align-items-center">
+                            <input type="hidden" name="idProducto" value="<%=p.getIdProducto()%>"/>
+                            <input type="hidden" name="idCategoria" value="<%=catSelect%>"/>
+                            <input type="number" name="cantidad" value="1" min="1" class="form-control me-2" style="width:80px;"/>
+                            <button type="submit" class="btn btn-sm btn-primary">Añadir</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

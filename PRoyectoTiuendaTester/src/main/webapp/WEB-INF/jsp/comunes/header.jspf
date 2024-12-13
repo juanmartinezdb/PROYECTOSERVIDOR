@@ -1,6 +1,7 @@
-<header class="container-fluid bg-dark text-light p-2" style="border-bottom:2px solid #444;">
-    <h1 class="text-center" style="font-family:'Courier New', monospace; margin:0;">
-        Tienda Digital - Máquina Expendedora Virtual
-    </h1>
+<header class="container-fluid p-2">
+   <div class="container d-flex justify-items-center align-items-center">
+    <img src="<%=request.getContextPath()%>/imagenes/logo.png" alt="LOGO" style="height: 120px;">
+    <h1 class="text-center">Maquina Expendedora</h1>
+
+   </div>
 </header>
-<%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>

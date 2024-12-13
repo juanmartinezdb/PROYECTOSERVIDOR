@@ -8,8 +8,7 @@
     <meta charset="UTF-8">
     <title>Carrito - Tienda Digital</title>
     <%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <%@ include file="/WEB-INF/jsp/comunes/css.jspf" %>
 </head>
 <body class="d-flex flex-column vh-100">
 
@@ -28,24 +27,24 @@
     }
 %>
 
-<div class="container mt-3 d-flex">
-    <div class="flex-grow-1 me-3">
+<div class="container mt-3 d-flex flex-grow-1 ">
+    <div class="flex-grow-1  me-3">
         <%
             if (productosCarrito != null && !productosCarrito.isEmpty()) {
                 for (Producto p : productosCarrito) {
                     int cantidad = carritoMap.get(p.getIdProducto());
         %>
         <div class="card mb-3" style="border:2px solid #444;">
-            <div class="row g-0">
-                <div class="col-md-3 d-flex align-items-center justify-content-center">
+            <div class="row g-0 d-flex align-items-center justify-content-center">
+                <div class="col-md-3 d-flex align-items-center justify-content-center" style="height:100px; width:100px;">
                     <% if (p.getImagen()!=null && !p.getImagen().isEmpty()) { %>
-                    <img src="<%=request.getContextPath()%>/images/<%=p.getImagen()%>" class="img-fluid" alt="<%=p.getNombre()%>">
+                    <img src="<%=request.getContextPath()%>/imagenes/<%=p.getImagen()%>" class="img-fluid" alt="<%=p.getNombre()%>">
                     <% } else { %>
                     <div style="height:100px; width:100px; background:#888;"></div>
                     <% } %>
                 </div>
                 <div class="col-md-9">
-                    <div class="card-body" style="font-family:'Courier New', monospace;">
+                    <div class="card-body">
                         <h5 class="card-title"><%=p.getNombre()%></h5>
                         <p class="card-text text-success"><strong><%=p.getPrecio()%> € c/u</strong></p>
                         <p>Cantidad:</p>
@@ -74,7 +73,7 @@
         %>
     </div>
     <div style="width:300px;">
-        <div class="card p-3" style="border:2px solid #444;font-family:'Courier New', monospace;">
+        <div class="card p-3" style="border:2px solid #444;">
             <h5>Total: <%= total %> €</h5>
             <form action="<%=request.getContextPath()%>/carrito" method="post">
                 <input type="hidden" name="accion" value="confirmar"/>

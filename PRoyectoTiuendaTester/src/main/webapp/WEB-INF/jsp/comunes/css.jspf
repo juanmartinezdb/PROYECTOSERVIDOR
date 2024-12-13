@@ -1,0 +1,44 @@
+<style>
+/*
+    body {
+        background-color: rgb(245, 238, 230);
+    }
+    header{
+        background-color: rgb(255, 248, 227);
+        color: rgb(230, 164, 180);
+    }
+
+    .barranavegacion{
+        background-color: rgb(243, 215, 202);
+        color: black;
+
+
+    }
+    .backbar, .ventasbar, footer{
+        background-color: rgb(230, 164, 180);
+        color: rgb(255, 248, 227) ;
+
+    }
+    a{
+        display: inline-block;
+        padding: 10px 15px;
+        color: rgb(255, 248, 227);
+        text-decoration: none;
+    }
+    a:hover {
+        background-color: rgb(255, 248, 227);
+        color: rgb(230, 164, 180);
+    }*/
+   /* .categoria-link {
+        padding: 5px 10px;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .categoria-link:hover {
+        background-color: rgb(255, 248, 227);
+        border-color: rgb(255, 248, 227);
+        color: rgb(230, 164, 180);;
+    }*/
+</style>

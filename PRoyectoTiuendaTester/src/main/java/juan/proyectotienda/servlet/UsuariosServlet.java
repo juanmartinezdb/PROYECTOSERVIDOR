@@ -46,7 +46,7 @@ public class UsuariosServlet extends HttpServlet {
                     int id = Integer.parseInt(parts[1]);
                     Optional<Usuario> u = usuarioDAO.find(id);
                     if (u.isPresent()) {
-                        request.setAttribute("usuario", u);
+                        request.setAttribute("usuario", u.get());
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/detalle-usuario.jsp");
                     } else {
                         response.sendRedirect(request.getContextPath() + "/back/usuarios");
@@ -63,7 +63,7 @@ public class UsuariosServlet extends HttpServlet {
                     int id = Integer.parseInt(parts[2]);
                     Optional<Usuario> u = usuarioDAO.find(id);
                     if (u.isPresent()) {
-                        request.setAttribute("usuario", u);
+                        request.setAttribute("usuario", u.get());
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/editar-usuario.jsp");
                     } else {
                         response.sendRedirect(request.getContextPath() + "/back/usuarios");

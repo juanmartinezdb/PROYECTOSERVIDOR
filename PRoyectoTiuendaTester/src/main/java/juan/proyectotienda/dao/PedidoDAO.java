@@ -13,10 +13,10 @@ public interface PedidoDAO {
     void update(Pedido pedido);
     void delete(int id);
 
-    // Método para crear pedido con sus artículos
+    // cfear el pedido con los articulos
     void createWithItems(Pedido pedido, List<Producto> productos, List<Integer> cantidades);
 
-    // Obtener productos (y cantidades) de un pedido
+
     List<Producto> getProductosDePedido(int idPedido);
     List<Integer> getCantidadesDePedido(int idPedido);
 }

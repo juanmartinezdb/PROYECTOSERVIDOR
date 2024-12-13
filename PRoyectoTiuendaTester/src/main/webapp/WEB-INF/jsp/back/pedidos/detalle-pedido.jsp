@@ -7,8 +7,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalle Pedido - Back</title>
-    <!-- CDN de Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>
+    <%@ include file="/WEB-INF/jsp/comunes/css.jspf" %>
 </head>
 <body class="d-flex flex-column vh-100">
 
@@ -16,7 +16,7 @@
 <%@ include file="/WEB-INF/jsp/comunes/navbar.jspf" %>
 <%@ include file="/WEB-INF/jsp/comunes/backbar.jspf" %>
 
-<div class="container flex-grow-1 mt-3" style="font-family:'Courier New', monospace;">
+<div class="container flex-grow-1 mt-3">
     <%
         Pedido ped = (Pedido)request.getAttribute("pedido");
         List<Producto> productosPedido = (List<Producto>)request.getAttribute("productosPedido");
@@ -34,7 +34,7 @@
         if (productosPedido != null && !productosPedido.isEmpty()) {
     %>
     <table class="table table-bordered table-striped table-hover">
-        <thead class="table-dark">
+        <thead class="">
         <tr>
             <th>Producto</th>
             <th>Cantidad</th>

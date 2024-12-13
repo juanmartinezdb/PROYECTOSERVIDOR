@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "ventasServlet", value = "/ventas/*")
+@WebServlet(name = "ventasServlet", value = {"/index.jsp", "/ventas/*"})
 public class VentasServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private CategoriaDAO categoriaDAO = new CategoriaDAOImpl();
@@ -33,7 +33,8 @@ public class VentasServlet extends HttpServlet {
         List<Producto> todosProductos = productoDAO.getAll();
 
         if (pathInfo == null || "/".equals(pathInfo)) {
-            // Mostrar todos o sin filtro
+            // El index que lo voy a redireccionar a VENTAS (para que salte la mquina directamente)
+            // "/" la barra vacia
             request.setAttribute("listaProductos", todosProductos);
             dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/front/ventas.jsp");
 
@@ -42,16 +43,16 @@ public class VentasServlet extends HttpServlet {
             String[] parts = pathInfo.split("/");
 
             if (parts.length == 2) {
-                // /ventas/{idCategoria} filtrar por categoría
+                // /ventas/num salta segun la id de la categoria
                 try {
                     int idCat = Integer.parseInt(parts[1]);
                     List<Producto> filtrados = todosProductos.stream()
-                            .filter(p -> p.getIdCategoria() == idCat)
-                            .collect(Collectors.toList());
+                                                                    .filter(p -> p.getIdCategoria() == idCat)
+                                                                    .collect(Collectors.toList());
                     request.setAttribute("listaProductos", filtrados);
                     dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/front/ventas.jsp");
                 } catch (NumberFormatException e) {
-                    request.setAttribute("listaProductos", todosProductos);
+                    e.printStackTrace();
                     dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/front/ventas.jsp");
                 }
 
@@ -66,20 +67,33 @@ public class VentasServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Añadir al carrito
+
+        //Solo hay uno que lo que hace es aádir al carrito.
         HttpSession session = request.getSession(true);
 
         int idProducto = Integer.parseInt(request.getParameter("idProducto"));
         int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+        int idCategoria = Integer.parseInt(request.getParameter("idCategoria"));
 
         Map<Integer, Integer> carrito = (Map<Integer, Integer>) session.getAttribute("carrito");
+
         if (carrito == null) {
             carrito = new HashMap<>();
         }
 
-        carrito.put(idProducto, carrito.getOrDefault(idProducto, 0) + cantidad);
+        if (carrito.containsKey(idProducto)) {
+            int cantidadActual = carrito.get(idProducto);
+            carrito.put(idProducto, cantidadActual + cantidad);
+        } else {
+            carrito.put(idProducto, cantidad);
+        }
+
         session.setAttribute("carrito", carrito);
 
-        response.sendRedirect(request.getContextPath() + "/ventas");
+        if (idCategoria > 0 ) {
+            response.sendRedirect(request.getContextPath() + "/ventas/" + idCategoria);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/ventas");
+        }
     }
 }

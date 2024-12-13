@@ -50,7 +50,7 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
         try {
             conn = connectDB();
             s = conn.createStatement();
-            rs = s.executeQuery("SELECT idPedido, idCliente, fecha, total FROM pedido");
+            rs = s.executeQuery("SELECT * FROM pedido");
 
             while (rs.next()) {
                 Pedido p = new Pedido();
@@ -77,7 +77,7 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
 
         try {
             conn = connectDB();
-            ps = conn.prepareStatement("SELECT idPedido, idCliente, fecha, total FROM pedido WHERE idPedido = ?");
+            ps = conn.prepareStatement("SELECT * FROM pedido WHERE idPedido = ?");
             ps.setInt(1, id);
             rs = ps.executeQuery();
 
@@ -162,6 +162,8 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
         }
     }
 
+
+
     @Override
     public List<Producto> getProductosDePedido(int idPedido) {
         List<Producto> lista = new ArrayList<>();
@@ -171,9 +173,7 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
 
         try {
             conn = connectDB();
-            ps = conn.prepareStatement("SELECT p.idProducto, p.nombre, p.descripcion, p.precio, p.imagen, p.idCategoria " +
-                    "FROM articulos_pedido ap JOIN producto p ON ap.idProducto = p.idProducto " +
-                    "WHERE ap.idPedido = ?");
+            ps = conn.prepareStatement("SELECT p.idProducto, p.nombre, p.descripcion, p.precio, p.imagen, p.idCategoria FROM articulos_pedido ap JOIN producto p ON ap.idProducto = p.idProducto WHERE ap.idPedido = ?");
             ps.setInt(1, idPedido);
             rs = ps.executeQuery();
             while (rs.next()) {
