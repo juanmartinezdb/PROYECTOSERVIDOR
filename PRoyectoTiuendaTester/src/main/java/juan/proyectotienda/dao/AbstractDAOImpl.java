@@ -1,6 +1,12 @@
 package juan.proyectotienda.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -14,7 +20,6 @@ public abstract class AbstractDAOImpl {
 	
 	static {
 		ResourceBundle bundle = ResourceBundle.getBundle("juan.proyectotienda.dao.database");
-
 		driverClassName = bundle.getString("jdbc.driverClassName");
 		dbUrl = bundle.getString("jdbc.url");
 		schema = bundle.getString("jdbc.schema");

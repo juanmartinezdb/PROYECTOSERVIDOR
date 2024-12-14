@@ -22,11 +22,13 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
         try {
             conn = connectDB();
             ps = conn.prepareStatement("INSERT INTO categoria (nombre) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, categoria.getNombre());
+            int idx = 1;
+            ps.setString(idx++, categoria.getNombre());
+
             int rows = ps.executeUpdate();
 
             if (rows == 0) {
-                System.out.println("INSERT de categoria sin filas afectadas.");
+                System.out.println("INSERT de categoria con 0 filas insertadas.");
             }
 
             rsGenKeys = ps.getGeneratedKeys();
@@ -34,7 +36,9 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
                 categoria.setIdCategoria(rsGenKeys.getInt(1));
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rsGenKeys);
@@ -51,7 +55,7 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
         try {
             conn = connectDB();
             s = conn.createStatement();
-            rs = s.executeQuery("SELECT idCategoria, nombre FROM categoria");
+            rs = s.executeQuery("SELECT * FROM categoria");
 
             while (rs.next()) {
                 Categoria c = new Categoria();
@@ -60,7 +64,9 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
                 lista.add(c);
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, s, rs);
@@ -77,18 +83,22 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
 
         try {
             conn = connectDB();
-            ps = conn.prepareStatement("SELECT idCategoria, nombre FROM categoria WHERE idCategoria = ?");
-            ps.setInt(1, id);
+            ps = conn.prepareStatement("SELECT * FROM categoria WHERE idCategoria = ?");
+            int idx = 1;
+            ps.setInt(idx++, id);
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 Categoria c = new Categoria();
-                c.setIdCategoria(rs.getInt("idCategoria"));
-                c.setNombre(rs.getString("nombre"));
+                idx =1;
+                c.setIdCategoria(rs.getInt(idx++));
+                c.setNombre(rs.getString(idx++));
                 return Optional.of(c);
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rs);
@@ -101,22 +111,26 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
     public void update(Categoria categoria) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = connectDB();
             ps = conn.prepareStatement("UPDATE categoria SET nombre = ? WHERE idCategoria = ?");
-            ps.setString(1, categoria.getNombre());
-            ps.setInt(2, categoria.getIdCategoria());
+            int idx = 1;
+            ps.setString(idx++, categoria.getNombre());
+            ps.setInt(idx, categoria.getIdCategoria());
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) {
-                System.out.println("Update de categoria con 0 filas actualizadas.");
+                System.out.println("Update de categoria con 0 registros actualizadas.");
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, null);
+            closeDb(conn, ps, rs);
         }
     }
 
@@ -124,21 +138,23 @@ public class CategoriaDAOImpl extends AbstractDAOImpl implements CategoriaDAO {
     public void delete(int id) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
             conn = connectDB();
             ps = conn.prepareStatement("DELETE FROM categoria WHERE idCategoria = ?");
-            ps.setInt(1, id);
+            int idx = 1;
+            ps.setInt(idx, id);
 
             int rows = ps.executeUpdate();
             if (rows == 0) {
-                System.out.println("Delete de categoria con 0 filas eliminadas.");
+                System.out.println("Delete de categoria con 0 registros eliminadas.");
             }
 
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, null);
+            closeDb(conn, ps, rs);
         }
     }
 }

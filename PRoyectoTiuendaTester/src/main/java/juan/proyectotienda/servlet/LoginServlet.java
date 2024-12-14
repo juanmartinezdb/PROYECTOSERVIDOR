@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
-@WebServlet(name = "loginServlet", value = "/login")
+@WebServlet(name = "loginServlet", value = "/login2")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UsuarioDAO usuarioDAO = new UsuarioDAOImpl();

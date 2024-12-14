@@ -13,5 +13,6 @@ public interface UsuarioDAO {
     public void delete(int id);
 
     public Optional<Usuario> getByPassword(String password, String usuario);
+    public Optional<Usuario> getByNombre(String nombre);
 
 }

@@ -15,28 +15,32 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
     public void create(Pedido pedido) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         ResultSet rsGenKeys = null;
 
         try {
             conn = connectDB();
             ps = conn.prepareStatement("INSERT INTO pedido (idCliente, fecha, total) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, pedido.getIdCliente());
-            ps.setDate(2, Date.valueOf(pedido.getFecha()));
-            ps.setBigDecimal(3, pedido.getTotal());
+            int idx = 1;
+            ps.setInt(idx++, pedido.getIdCliente());
+            ps.setDate(idx++, Date.valueOf(pedido.getFecha()));
+            ps.setBigDecimal(idx++, pedido.getTotal());
 
             int rows = ps.executeUpdate();
             if (rows == 0) {
-                System.out.println("INSERT de pedido sin filas afectadas.");
+                System.out.println("INSERT de pedido con 0 filas insertadas.");
             }
 
             rsGenKeys = ps.getGeneratedKeys();
             if (rsGenKeys.next()) {
                 pedido.setIdPedido(rsGenKeys.getInt(1));
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, rsGenKeys);
+            closeDb(conn, ps, rs);
         }
     }
 
@@ -54,13 +58,16 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
 
             while (rs.next()) {
                 Pedido p = new Pedido();
-                p.setIdPedido(rs.getInt("idPedido"));
-                p.setIdCliente(rs.getInt("idCliente"));
-                p.setFecha(rs.getDate("fecha").toLocalDate());
-                p.setTotal(rs.getBigDecimal("total"));
+                int idx = 1;
+                p.setIdPedido(rs.getInt(idx++));
+                p.setIdCliente(rs.getInt(idx++));
+                p.setFecha(rs.getDate(idx++).toLocalDate());
+                p.setTotal(rs.getBigDecimal(idx++));
                 lista.add(p);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, s, rs);
@@ -78,18 +85,22 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
         try {
             conn = connectDB();
             ps = conn.prepareStatement("SELECT * FROM pedido WHERE idPedido = ?");
-            ps.setInt(1, id);
+            int idx = 1;
+            ps.setInt(idx, id);
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 Pedido p = new Pedido();
-                p.setIdPedido(rs.getInt("idPedido"));
-                p.setIdCliente(rs.getInt("idCliente"));
-                p.setFecha(rs.getDate("fecha").toLocalDate());
-                p.setTotal(rs.getBigDecimal("total"));
+                idx = 1;
+                p.setIdPedido(rs.getInt(idx++));
+                p.setIdCliente(rs.getInt(idx++));
+                p.setFecha(rs.getDate(idx++).toLocalDate());
+                p.setTotal(rs.getBigDecimal(idx++));
                 return Optional.of(p);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rs);
@@ -102,91 +113,162 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
     public void update(Pedido pedido) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = connectDB();
             ps = conn.prepareStatement("UPDATE pedido SET idCliente = ?, fecha = ?, total = ? WHERE idPedido = ?");
-            ps.setInt(1, pedido.getIdCliente());
-            ps.setDate(2, Date.valueOf(pedido.getFecha()));
-            ps.setBigDecimal(3, pedido.getTotal());
-            ps.setInt(4, pedido.getIdPedido());
+            int idx = 1;
+            ps.setInt(idx++, pedido.getIdCliente());
+            ps.setDate(idx++, Date.valueOf(pedido.getFecha()));
+            ps.setBigDecimal(idx++, pedido.getTotal());
+            ps.setInt(idx, pedido.getIdPedido());
 
-            ps.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) {
+                System.out.println("Update de pedido con 0 registros actualizados.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, null);
+            closeDb(conn, ps, rs);
         }
     }
 
     @Override
     public void delete(int id) {
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement ps = null; //para el PEDIDO
+        PreparedStatement psArticulos = null; //para los ARTICULOS
 
         try {
             conn = connectDB();
+//ARTICULOS (PRIMERO QUE SON LOS QUE DAN EL FALLO)
+            psArticulos = conn.prepareStatement("DELETE FROM articulos_pedido WHERE idPedido = ?");
+            int idx = 1;
+            psArticulos.setInt(idx, id);
+            int rows = psArticulos.executeUpdate();
+            if (rows == 0) {
+                System.out.println("Delete de articulos con 0 registros eliminados.");
+            }
+            //EL PEDIDO (ULTIMO)
             ps = conn.prepareStatement("DELETE FROM pedido WHERE idPedido = ?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            closeDb(conn, ps, null);
-        }
-    }
+            idx = 1;
+            ps.setInt(idx, id);
+            rows = ps.executeUpdate();
 
-    @Override
-    public void createWithItems(Pedido pedido, List<Producto> productos, List<Integer> cantidades) {
-        // Primero creamos el pedido
-        create(pedido);
-
-        // Luego insertamos las líneas en articulos_pedido
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        try {
-            conn = connectDB();
-            ps = conn.prepareStatement("INSERT INTO articulos_pedido (idPedido, idProducto, cantidad) VALUES (?, ?, ?)");
-
-            for (int i = 0; i < productos.size(); i++) {
-                ps.setInt(1, pedido.getIdPedido());
-                ps.setInt(2, productos.get(i).getIdProducto());
-                ps.setInt(3, cantidades.get(i));
-                ps.executeUpdate();
+            if (rows == 0) {
+                System.out.println("Delete de pedido con 0 registros eliminados.");
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
+            closeDb(conn, psArticulos, null);
             closeDb(conn, ps, null);
         }
     }
 
 
-
     @Override
-    public List<Producto> getProductosDePedido(int idPedido) {
-        List<Producto> lista = new ArrayList<>();
+    public void createConArticulos(Pedido pedido, List<Producto> productos, List<Integer> cantidades) {
+        // Llamamos al crear pedido de base normal
+        create(pedido);
+
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
             conn = connectDB();
-            ps = conn.prepareStatement("SELECT p.idProducto, p.nombre, p.descripcion, p.precio, p.imagen, p.idCategoria FROM articulos_pedido ap JOIN producto p ON ap.idProducto = p.idProducto WHERE ap.idPedido = ?");
-            ps.setInt(1, idPedido);
+            ps = conn.prepareStatement("INSERT INTO articulos_pedido (idPedido, idProducto, cantidad) VALUES (?, ?, ?)");
+            int idx = 1;
+            for (int i = 0; i < productos.size(); i++) {
+                idx=1;
+                ps.setInt(idx++, pedido.getIdPedido());
+                ps.setInt(idx++, productos.get(i).getIdProducto());
+                ps.setInt(idx, cantidades.get(i));
+                ps.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(conn, ps, rs);
+        }
+    }
+
+
+    @Override
+    public List<Pedido> getPedidosByCliente(int idCliente) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try {
+            conn = connectDB();
+            ps = conn.prepareStatement("SELECT * FROM pedido WHERE idCliente = ?");
+            int idx = 1;
+            ps.setInt(idx, idCliente);
             rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Pedido pedido = new Pedido();
+                idx = 1;
+
+                pedido.setIdPedido(rs.getInt(idx++));
+                pedido.setIdCliente(rs.getInt(idx++));
+                pedido.setFecha(rs.getDate(idx++).toLocalDate());
+                pedido.setTotal(rs.getBigDecimal(idx++));
+                pedidos.add(pedido);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(conn, ps, rs);
+        }
+
+        return pedidos;
+    }
+
+    @Override
+    public List<Producto> getProductosDePedido(int idPedido) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> lista = new ArrayList<>();
+
+        try {
+            conn = connectDB();
+            ps = conn.prepareStatement("SELECT p.idProducto, p.nombre, p.descripcion, p.precio, p.imagen, p.idCategoria FROM articulos_pedido ap JOIN producto p ON ap.idProducto = p.idProducto WHERE ap.idPedido = ?");
+            int idx = 1;
+            ps.setInt(idx, idPedido);
+            rs = ps.executeQuery();
+
             while (rs.next()) {
                 Producto pr = new Producto();
-                pr.setIdProducto(rs.getInt("idProducto"));
-                pr.setNombre(rs.getString("nombre"));
-                pr.setDescripcion(rs.getString("descripcion"));
-                pr.setPrecio(rs.getBigDecimal("precio"));
-                pr.setImagen(rs.getString("imagen"));
-                pr.setIdCategoria(rs.getInt("idCategoria"));
+                idx =1;
+                pr.setIdProducto(rs.getInt(idx++));
+                pr.setNombre(rs.getString(idx++));
+                pr.setDescripcion(rs.getString(idx++));
+                pr.setPrecio(rs.getBigDecimal(idx++));
+                pr.setImagen(rs.getString(idx++));
+                pr.setIdCategoria(rs.getInt(idx++));
                 lista.add(pr);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rs);
@@ -197,19 +279,24 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
 
     @Override
     public List<Integer> getCantidadesDePedido(int idPedido) {
-        List<Integer> cantidades = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        List<Integer> cantidades = new ArrayList<>();
+
         try {
             conn = connectDB();
             ps = conn.prepareStatement("SELECT cantidad FROM articulos_pedido WHERE idPedido = ?");
-            ps.setInt(1, idPedido);
+            int idx = 1;
+            ps.setInt(idx, idPedido);
             rs = ps.executeQuery();
             while (rs.next()) {
-                cantidades.add(rs.getInt("cantidad"));
+                idx =1;
+                cantidades.add(rs.getInt(idx));
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rs);

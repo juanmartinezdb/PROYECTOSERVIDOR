@@ -2,6 +2,7 @@
 <%@ page import="juan.proyectotienda.model.Producto" %>
 <%@ page import="juan.proyectotienda.model.Categoria" %>
 <%@ page import="java.util.*" %>
+<%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,9 +19,10 @@
 <div class="container flex-grow-1 mt-3">
     <h2>Editar Producto</h2>
     <%
-        Producto p = (Producto)request.getAttribute("producto");
+        Optional<Producto> optProd = (Optional<Producto>)request.getAttribute("producto");
         List<Categoria> listaCategorias = (List<Categoria>)request.getAttribute("listaCategorias");
-        if (p != null) {
+        if (optProd.isPresent()) {
+            Producto p = optProd.get();
     %>
     <form action="<%=request.getContextPath()%>/back/productos" method="post">
         <input type="hidden" name="__method__" value="put"/>
@@ -70,6 +72,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

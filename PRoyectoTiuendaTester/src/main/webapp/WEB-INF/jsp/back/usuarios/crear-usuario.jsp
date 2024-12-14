@@ -34,6 +34,12 @@
         <input type="submit" class="btn btn-success" value="Crear" />
         <a href="<%=request.getContextPath()%>/back/usuarios" class="btn btn-secondary">Volver</a>
     </form>
+    <%
+        //PREGUNTAR POR EL BOOLEAN.TRUE si no lo pongo asi no lo reconoce da igual como lo ponga.
+        if (Boolean.TRUE.equals(request.getAttribute("existe"))) {
+    %>
+    <div class="badge bg-warning">Ese nombre de usuario ya existe, por favor escoge otro nombre</div>
+    <%}%>
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.Optional" %>
 <%@ page import="juan.proyectotienda.model.Categoria" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -18,17 +18,11 @@
 <div class="container flex-grow-1 mt-3">
 
     <%
-        Categoria c = null;
-        Object catObj = request.getAttribute("categoria");
-        if (catObj != null && catObj instanceof Categoria) {
-            c = (Categoria)catObj;
-        }
+        Optional<Categoria> optCat = (Optional<Categoria>) request.getAttribute("categoria");
+        if (optCat.isPresent()) {
+            Categoria c = optCat.get();
     %>
-
     <h2>Detalle Categoría</h2>
-    <%
-        if (c != null) {
-    %>
     <div class="mb-3">
         <label><strong>ID:</strong></label>
         <span><%= c.getIdCategoria() %></span>
@@ -52,6 +46,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

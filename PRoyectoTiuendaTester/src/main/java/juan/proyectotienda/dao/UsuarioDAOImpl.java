@@ -1,5 +1,6 @@
 package juan.proyectotienda.dao;
 
+import juan.proyectotienda.model.Pedido;
 import juan.proyectotienda.model.Usuario;
 
 import java.sql.*;
@@ -13,18 +14,20 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
     public void create(Usuario usuario) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         ResultSet rsGenKeys = null;
 
         try {
             conn = connectDB();
             ps = conn.prepareStatement("INSERT INTO usuario (nombre, password, rol) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getPassword());
-            ps.setString(3, usuario.getRol());
+            int idx =1;
+            ps.setString(idx++, usuario.getNombre());
+            ps.setString(idx++, usuario.getPassword());
+            ps.setString(idx++, usuario.getRol());
 
             int rows = ps.executeUpdate();
             if (rows == 0) {
-                System.out.println("INSERT de usuario sin filas afectadas.");
+                System.out.println("INSERT de usuario con 0 filas afectadas.");
             }
 
             rsGenKeys = ps.getGeneratedKeys();
@@ -34,7 +37,7 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, rsGenKeys);
+            closeDb(conn, ps, rs);
         }
     }
 
@@ -48,17 +51,20 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
         try {
             conn = connectDB();
             s = conn.createStatement();
-            rs = s.executeQuery("SELECT idUsuario, nombre, password, rol FROM usuario");
+            rs = s.executeQuery("SELECT * FROM usuario");
 
             while (rs.next()) {
                 Usuario u = new Usuario();
-                u.setIdUsuario(rs.getInt("idUsuario"));
-                u.setNombre(rs.getString("nombre"));
-                u.setPassword(rs.getString("password"));
-                u.setRol(rs.getString("rol"));
+                int idx = 1;
+                u.setIdUsuario(rs.getInt(idx++));
+                u.setNombre(rs.getString(idx++));
+                u.setPassword(rs.getString(idx++));
+                u.setRol(rs.getString(idx++));
                 lista.add(u);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, s, rs);
@@ -75,19 +81,23 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
 
         try {
             conn = connectDB();
-            ps = conn.prepareStatement("SELECT idUsuario, nombre, password, rol FROM usuario WHERE idUsuario = ?");
-            ps.setInt(1, id);
+            ps = conn.prepareStatement("SELECT * FROM usuario WHERE idUsuario = ?");
+            int idx = 1;
+            ps.setInt(idx++, id);
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 Usuario u = new Usuario();
-                u.setIdUsuario(rs.getInt("idUsuario"));
-                u.setNombre(rs.getString("nombre"));
-                u.setPassword(rs.getString("password"));
-                u.setRol(rs.getString("rol"));
+                idx = 1;
+                u.setIdUsuario(rs.getInt(idx++));
+                u.setNombre(rs.getString(idx++));
+                u.setPassword(rs.getString(idx++));
+                u.setRol(rs.getString(idx++));
                 return Optional.of(u);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rs);
@@ -100,22 +110,27 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
     public void update(Usuario usuario) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
+
         try {
             conn = connectDB();
             ps = conn.prepareStatement("UPDATE usuario SET nombre = ?, password = ?, rol = ? WHERE idUsuario = ?");
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getPassword());
-            ps.setString(3, usuario.getRol());
-            ps.setInt(4, usuario.getIdUsuario());
+            int idx = 1;
+            ps.setString(idx++, usuario.getNombre());
+            ps.setString(idx++, usuario.getPassword());
+            ps.setString(idx++, usuario.getRol());
+            ps.setInt(idx++, usuario.getIdUsuario());
 
             int rows = ps.executeUpdate();
             if (rows == 0) {
-                System.out.println("Update de usuario con 0 filas actualizadas.");
+                System.out.println("Update de usuario con 0 registros actualizadas.");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, null);
+            closeDb(conn, ps, rs);
         }
     }
 
@@ -123,8 +138,18 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
     public void delete(int id) {
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
+    PedidoDAO pdao = new PedidoDAOImpl();
         try {
             conn = connectDB();
+
+            //BORRADO DE LOS PEDIDOS
+            List<Pedido> lista = pdao.getPedidosByCliente(id);
+            for (Pedido p : lista) {
+                pdao.delete(p.getIdPedido());
+            }
+
+            //BORRADO DE CLIENTE
             ps = conn.prepareStatement("DELETE FROM usuario WHERE idUsuario = ?");
             ps.setInt(1, id);
 
@@ -132,10 +157,12 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
             if (rows == 0) {
                 System.out.println("Delete de usuario con 0 filas eliminadas.");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeDb(conn, ps, null);
+            closeDb(conn, ps, rs);
         }
     }
 
@@ -147,21 +174,59 @@ public class UsuarioDAOImpl extends AbstractDAOImpl implements UsuarioDAO {
 
         try {
             conn = connectDB();
-            ps = conn.prepareStatement("SELECT idUsuario, nombre, password, rol FROM usuario WHERE password = ? AND nombre = ?");
-            ps.setString(1, password);
-            ps.setString(2, usuario);
+            ps = conn.prepareStatement("SELECT * FROM usuario WHERE password = ? AND nombre = ?");
+            int idx = 1;
+            ps.setString(idx++, password);
+            ps.setString(idx, usuario);
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 Usuario u = new Usuario();
-                u.setIdUsuario(rs.getInt("idUsuario"));
-                u.setNombre(rs.getString("nombre"));
-                u.setPassword(rs.getString("password"));
-                u.setRol(rs.getString("rol"));
+                idx = 1;
+                u.setIdUsuario(rs.getInt(idx++));
+                u.setNombre(rs.getString(idx++));
+                u.setPassword(rs.getString(idx++));
+                u.setRol(rs.getString(idx++));
                 return Optional.of(u);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(conn, ps, rs);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> getByNombre(String usuario) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = connectDB();
+            ps = conn.prepareStatement("SELECT * FROM usuario WHERE nombre = ?");
+            int idx = 1;
+            ps.setString(idx, usuario);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                idx = 1;
+                u.setIdUsuario(rs.getInt(idx++));
+                u.setNombre(rs.getString(idx++));
+                u.setPassword(rs.getString(idx++));
+                u.setRol(rs.getString(idx++));
+                return Optional.of(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeDb(conn, ps, rs);

@@ -14,9 +14,10 @@ public interface PedidoDAO {
     void delete(int id);
 
     // cfear el pedido con los articulos
-    void createWithItems(Pedido pedido, List<Producto> productos, List<Integer> cantidades);
+    void createConArticulos(Pedido pedido, List<Producto> productos, List<Integer> cantidades);
 
-
+    //para pillar lo de articulos
     List<Producto> getProductosDePedido(int idPedido);
     List<Integer> getCantidadesDePedido(int idPedido);
+    List<Pedido> getPedidosByCliente(int idCliente);
 }

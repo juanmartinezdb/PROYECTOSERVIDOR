@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page import="java.util.Optional" %>
 <%@ page import="juan.proyectotienda.model.Categoria" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -18,8 +19,9 @@
     <h2>Editar Categoría</h2>
 
     <%
-        Categoria c = (Categoria)request.getAttribute("categoria");
-        if (c != null) {
+        Optional<Categoria> optCat = (Optional<Categoria>)request.getAttribute("categoria");
+        if (optCat.isPresent()) {
+            Categoria c = optCat.get();
     %>
     <form action="<%=request.getContextPath()%>/back/categorias" method="post">
         <input type="hidden" name="__method__" value="put"/>

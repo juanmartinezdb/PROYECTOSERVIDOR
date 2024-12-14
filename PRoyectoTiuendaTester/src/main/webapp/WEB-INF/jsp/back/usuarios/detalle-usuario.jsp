@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="juan.proyectotienda.model.Usuario" %>
+<%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,8 +17,9 @@
 
 <div class="container flex-grow-1 mt-3">
     <%
-        Usuario u = (Usuario)request.getAttribute("usuario");
-        if (u != null) {
+        Optional<Usuario> optUsu = (Optional<Usuario>) request.getAttribute("usuario");
+        if (optUsu.isPresent()) {
+            Usuario u = optUsu.get();
     %>
     <h2>Detalle Usuario</h2>
     <p><strong>ID:</strong> <%=u.getIdUsuario()%></p>
@@ -36,6 +38,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

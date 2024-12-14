@@ -36,8 +36,4 @@ public class Util {
 
     }
 
-    public static Optional<Usuario> autentificacion (Usuario user){
-        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
-        return usuarioDAO.getByPassword(user.getPassword(), user.getNombre());
-    }
 }

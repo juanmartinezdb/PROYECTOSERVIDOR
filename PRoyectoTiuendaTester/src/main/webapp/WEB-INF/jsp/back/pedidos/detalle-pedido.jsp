@@ -18,10 +18,12 @@
 
 <div class="container flex-grow-1 mt-3">
     <%
-        Pedido ped = (Pedido)request.getAttribute("pedido");
+        Optional<Pedido> optPed = (Optional<Pedido>)request.getAttribute("pedido");
         List<Producto> productosPedido = (List<Producto>)request.getAttribute("productosPedido");
         List<Integer> cantidades = (List<Integer>)request.getAttribute("cantidadesPedido");
-        if (ped != null) {
+
+        if (optPed.isPresent()) {
+            Pedido ped = optPed.get();
     %>
     <h2>Detalle Pedido</h2>
     <p><strong>ID Pedido:</strong> <%=ped.getIdPedido()%></p>
@@ -34,7 +36,7 @@
         if (productosPedido != null && !productosPedido.isEmpty()) {
     %>
     <table class="table table-bordered table-striped table-hover">
-        <thead class="">
+        <thead>
         <tr>
             <th>Producto</th>
             <th>Cantidad</th>
@@ -80,6 +82,6 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

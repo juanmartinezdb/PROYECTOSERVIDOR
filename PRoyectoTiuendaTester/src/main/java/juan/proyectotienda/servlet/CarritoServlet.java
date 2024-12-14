@@ -1,5 +1,19 @@
 package juan.proyectotienda.servlet;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import juan.proyectotienda.dao.ProductoDAO;
 import juan.proyectotienda.dao.ProductoDAOImpl;
 import juan.proyectotienda.dao.PedidoDAO;
@@ -7,16 +21,6 @@ import juan.proyectotienda.dao.PedidoDAOImpl;
 import juan.proyectotienda.model.Producto;
 import juan.proyectotienda.model.Pedido;
 import juan.proyectotienda.model.Usuario;
-
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.WebServlet;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "carritoServlet", value = "/carrito")
 public class CarritoServlet extends HttpServlet {
@@ -104,7 +108,7 @@ public class CarritoServlet extends HttpServlet {
             p.setFecha(LocalDate.now());
             p.setTotal(total);
 
-            pedidoDAO.createWithItems(p, productos, cantidades);
+            pedidoDAO.createConArticulos(p, productos, cantidades);
 
             // Vaciar carrito
             carrito.clear();

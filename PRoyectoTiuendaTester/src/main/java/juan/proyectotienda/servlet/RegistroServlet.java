@@ -12,7 +12,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-@WebServlet(name = "registroServlet", value = "/registro")
+@WebServlet(name = "registroServlet", value = "/registro2")
 public class RegistroServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UsuarioDAO usuarioDAO = new UsuarioDAOImpl();

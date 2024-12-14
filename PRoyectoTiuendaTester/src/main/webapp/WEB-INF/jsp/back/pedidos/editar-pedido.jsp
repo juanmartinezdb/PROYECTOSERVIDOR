@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="juan.proyectotienda.model.Pedido" %>
+<%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,8 +17,9 @@
 <div class="container flex-grow-1 mt-3">
     <h2>Editar Pedido</h2>
     <%
-        Pedido ped = (Pedido)request.getAttribute("pedido");
-        if (ped != null) {
+        Optional<Pedido> optPed = (Optional<Pedido>)request.getAttribute("pedido");
+        if (optPed.isPresent()) {
+            Pedido ped = optPed.get();
     %>
     <form action="<%=request.getContextPath()%>/back/pedidos" method="post">
         <input type="hidden" name="__method__" value="put"/>
@@ -48,6 +50,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

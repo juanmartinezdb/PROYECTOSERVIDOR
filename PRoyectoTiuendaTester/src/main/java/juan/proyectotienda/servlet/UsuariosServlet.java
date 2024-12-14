@@ -1,19 +1,22 @@
 package juan.proyectotienda.servlet;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Optional;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import juan.proyectotienda.dao.UsuarioDAO;
 import juan.proyectotienda.dao.UsuarioDAOImpl;
 import juan.proyectotienda.model.Usuario;
 import juan.proyectotienda.utilities.Util;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Optional;
 
 @WebServlet(name = "usuariosServlet", value = "/back/usuarios/*")
 public class UsuariosServlet extends HttpServlet {
@@ -27,56 +30,43 @@ public class UsuariosServlet extends HttpServlet {
         RequestDispatcher dispatcher;
 
         if (pathInfo == null || "/".equals(pathInfo)) {
-            // Listado
+
             List<Usuario> lista = usuarioDAO.getAll();
             request.setAttribute("listaUsuarios", lista);
             dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
 
         } else {
             pathInfo = pathInfo.replaceAll("/$", "");
-            String[] parts = pathInfo.split("/");
+            String[] pathParts = pathInfo.split("/");
 
-            if (parts.length == 2 && "crear".equals(parts[1])) {
-                // Form crear
+            if (pathParts.length == 2 && "crear".equals(pathParts[1])) {
+
                 dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/crear-usuario.jsp");
 
-            } else if (parts.length == 2) {
-                // Detalle
+            } else if (pathParts.length == 2) {
+//  /usuarios/{id}
                 try {
-                    int id = Integer.parseInt(parts[1]);
-                    Optional<Usuario> u = usuarioDAO.find(id);
-                    if (u.isPresent()) {
-                        request.setAttribute("usuario", u.get());
+                        request.setAttribute("usuario", usuarioDAO.find(Integer.parseInt(pathParts[1])));
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/detalle-usuario.jsp");
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/back/usuarios");
-                        return;
-                    }
+
                 } catch (NumberFormatException e) {
-                    response.sendRedirect(request.getContextPath() + "/back/usuarios");
-                    return;
+                    e.printStackTrace();
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
                 }
 
-            } else if (parts.length == 3 && "editar".equals(parts[1])) {
-                // Form editar
+            } else if (pathParts.length == 3 && "editar".equals(pathParts[1])) {
+                // /usuarios/editar/{id}
                 try {
-                    int id = Integer.parseInt(parts[2]);
-                    Optional<Usuario> u = usuarioDAO.find(id);
-                    if (u.isPresent()) {
-                        request.setAttribute("usuario", u.get());
+                        request.setAttribute("usuario", usuarioDAO.find(Integer.parseInt(pathParts[2])));
                         dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/editar-usuario.jsp");
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/back/usuarios");
-                        return;
-                    }
+
                 } catch (NumberFormatException e) {
-                    response.sendRedirect(request.getContextPath() + "/back/usuarios");
-                    return;
+                    e.printStackTrace();
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
                 }
 
             } else {
-                response.sendRedirect(request.getContextPath() + "/back/usuarios");
-                return;
+                dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
             }
         }
 
@@ -84,36 +74,65 @@ public class UsuariosServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        RequestDispatcher dispatcher = null;
         String __method__ = request.getParameter("__method__");
 
         if (__method__ == null) {
             // Crear
             Usuario u = new Usuario();
-            u.setNombre(request.getParameter("nombre"));
-            try {
-                u.setPassword(Util.hashPassword(request.getParameter("password")));
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+            String nombre = request.getParameter("nombre");
+            u.setNombre(nombre);
+
+            Optional<Usuario> existe = usuarioDAO.getByNombre(nombre);
+
+            if (existe.isPresent()) {
+                request.setAttribute("existe", true);
+                dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/crear-usuario.jsp");
+            } else {
+                try {
+                    u.setPassword(Util.hashPassword(request.getParameter("password")));
+                    u.setRol(request.getParameter("rol"));
+                    usuarioDAO.create(u);
+
+                    //para que me cargue los usuarios tengo que llamar la lista aqui, si no sale vacio
+                    List<Usuario> lista = usuarioDAO.getAll();
+                    request.setAttribute("listaUsuarios", lista);
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
+
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/crear-usuario.jsp");
+                }
             }
-            u.setRol(request.getParameter("rol"));
-            usuarioDAO.create(u);
 
         } else if ("put".equalsIgnoreCase(__method__)) {
             doPut(request, response);
+
+            //para que me cargue los usuarios tengo que llamar la lista aqui, si no sale vacio
+            List<Usuario> lista = usuarioDAO.getAll();
+            request.setAttribute("listaUsuarios", lista);
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
+
         } else if ("delete".equalsIgnoreCase(__method__)) {
             doDelete(request, response);
+
+            //para que me cargue los usuarios tengo que llamar la lista aqui, si no sale vacio
+            List<Usuario> lista = usuarioDAO.getAll();
+            request.setAttribute("listaUsuarios", lista);
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/usuarios/usuarios.jsp");
         }
 
-        response.sendRedirect(request.getContextPath() + "/back/usuarios");
+        dispatcher.forward(request, response);
     }
+
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            int id = Integer.parseInt(request.getParameter("idUsuario"));
             Usuario u = new Usuario();
-            u.setIdUsuario(id);
+        try {
+
+            u.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
             u.setNombre(request.getParameter("nombre"));
             u.setRol(request.getParameter("rol"));
             u.setPassword(Util.hashPassword(request.getParameter("password")));
@@ -127,8 +146,8 @@ public class UsuariosServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int id = Integer.parseInt(request.getParameter("idUsuario"));
-            usuarioDAO.delete(id);
+
+            usuarioDAO.delete(Integer.parseInt(request.getParameter("idUsuario")));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

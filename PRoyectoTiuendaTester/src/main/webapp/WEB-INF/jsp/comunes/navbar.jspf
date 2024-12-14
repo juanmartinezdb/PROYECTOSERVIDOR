@@ -47,7 +47,8 @@
                     if (userlog != null) {
                 %>
                 <span class="me-2">Hola, <%=userlog.getNombre()%></span>
-                <form action="<%=request.getContextPath()%>/login?accion=logout" method="post" class="d-inline">
+                <form action="<%=request.getContextPath()%>/login" method="post" class="d-inline">
+                    <input type="hidden" name="__method__" value="logout"/>
                     <input type="submit" value="Logout" class="btn btn-sm btn-outline-danger me-2"/>
                 </form>
                 <%

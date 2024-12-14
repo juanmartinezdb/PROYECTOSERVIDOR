@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="juan.proyectotienda.model.Producto" %>
+<%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,10 +15,10 @@
 <%@ include file="/WEB-INF/jsp/comunes/backbar.jspf" %>
 
 <div class="container flex-grow-1 mt-3">
-
     <%
-        Producto p = (Producto)request.getAttribute("producto");
-        if (p != null) {
+        Optional<Producto> optProd = (Optional<Producto>)request.getAttribute("producto");
+        if (optProd.isPresent()) {
+            Producto p = optProd.get();
     %>
     <h2>Detalle Producto</h2>
     <p><strong>ID:</strong> <%= p.getIdProducto() %></p>
@@ -36,10 +37,8 @@
     <%
         }
     %>
-
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

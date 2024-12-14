@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="juan.proyectotienda.model.Usuario" %>
+<%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,8 +17,9 @@
 <div class="container flex-grow-1 mt-3">
     <h2>Editar Usuario</h2>
     <%
-        Usuario u = (Usuario)request.getAttribute("usuario");
-        if (u != null) {
+        Optional<Usuario> optUsu = (Optional<Usuario>)request.getAttribute("usuario");
+        if (optUsu.isPresent()) {
+            Usuario u = optUsu.get();
     %>
     <form action="<%=request.getContextPath()%>/back/usuarios" method="post">
         <input type="hidden" name="__method__" value="put"/>
@@ -33,8 +35,8 @@
         <div class="mb-3">
             <label class="form-label">Rol (cliente/admin):</label>
             <select name="rol" class="form-select">
-                <option value="cliente">cliente</option>
-                <option value="admin">admin</option>
+                <option value="cliente" <%= "cliente".equals(u.getRol()) ? "selected" : "" %>>cliente</option>
+                <option value="admin" <%= "admin".equals(u.getRol()) ? "selected" : "" %>>admin</option>
             </select>
         </div>
         <button type="submit" class="btn btn-warning">Guardar</button>
