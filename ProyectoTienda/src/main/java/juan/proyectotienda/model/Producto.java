@@ -1,12 +1,13 @@
 package juan.proyectotienda.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Producto {
     private int idProducto;
     private String nombre;
     private String descripcion;
-    private double precio;
+    private BigDecimal precio;
     private String imagen;
     private int idCategoria;
 
@@ -34,11 +35,11 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

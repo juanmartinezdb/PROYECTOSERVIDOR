@@ -1,6 +1,7 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Crear Pedido - Back</title>
@@ -20,8 +21,8 @@
             <input type="number" name="idCliente" class="form-control" required />
         </div>
         <div class="mb-3">
-            <label class="form-label">Fecha (YYYY-MM-DD):</label>
-            <input type="text" name="fecha" class="form-control" required />
+            <label class="form-label">Fecha:</label>
+            <input type="date" name="fecha" class="form-control" required />
         </div>
         <div class="mb-3">
             <label class="form-label">Total:</label>
@@ -33,6 +34,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,12 +1,16 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ page import="java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+
 <%@ page import="juan.proyectotienda.model.Producto" %>
 <%@ page import="java.math.BigDecimal" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Carrito - Tienda Digital</title>
+    <title>Carrito</title>
     <%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>
     <%@ include file="/WEB-INF/jsp/comunes/css.jspf" %>
 </head>
@@ -16,18 +20,13 @@
 <%@ include file="/WEB-INF/jsp/comunes/navbar.jspf" %>
 
 <%
-    List<Producto> productosCarrito = (List<Producto>) request.getAttribute("productosCarrito");
-    Map<Integer,Integer> carritoMap = (Map<Integer,Integer>) request.getAttribute("carritoMap");
+    List<Producto> productosCarrito = (List<Producto>)request.getAttribute("productosCarrito");
+    Map<Integer,Integer> carritoMap = (Map<Integer,Integer>)request.getAttribute("carritoMap");
     BigDecimal total = (BigDecimal) request.getAttribute("total");
-    if (carritoMap == null) {
-        carritoMap = new HashMap<>();
-    }
-    if (total == null) {
-        total = BigDecimal.ZERO;
-    }
 %>
 
 <div class="container mt-3 d-flex flex-grow-1 ">
+
     <div class="flex-grow-1  me-3">
         <%
             if (productosCarrito != null && !productosCarrito.isEmpty()) {
@@ -40,23 +39,23 @@
                     <% if (p.getImagen()!=null && !p.getImagen().isEmpty()) { %>
                     <img src="<%=request.getContextPath()%>/imagenes/<%=p.getImagen()%>" class="img-fluid" alt="<%=p.getNombre()%>">
                     <% } else { %>
-                    <div style="height:100px; width:100px; background:#888;"></div>
+                    <img src="<%=request.getContextPath()%>/imagenes/generico.jpg" class="img-fluid" alt="<%=p.getNombre()%>">
                     <% } %>
                 </div>
                 <div class="col-md-9">
                     <div class="card-body">
                         <h5 class="card-title"><%=p.getNombre()%></h5>
-                        <p class="card-text text-success"><strong><%=p.getPrecio()%> € c/u</strong></p>
+                        <p class="card-text text-success"><strong><%=p.getPrecio()%> € /unidad</strong></p>
                         <p>Cantidad:</p>
                         <form action="<%=request.getContextPath()%>/carrito" method="post" class="d-inline">
                             <input type="hidden" name="idProducto" value="<%=p.getIdProducto()%>"/>
                             <input type="number" name="cantidad" value="<%=cantidad%>" min="1" class="form-control d-inline-block" style="width:80px;vertical-align:middle;"/>
-                            <input type="hidden" name="accion" value="actualizar"/>
+                            <input type="hidden" name="__method__" value="put"/>
                             <button type="submit" class="btn btn-sm btn-warning ms-2">Actualizar</button>
                         </form>
                         <form action="<%=request.getContextPath()%>/carrito" method="post" class="d-inline ms-2">
                             <input type="hidden" name="idProducto" value="<%=p.getIdProducto()%>"/>
-                            <input type="hidden" name="accion" value="eliminar"/>
+                            <input type="hidden" name="__method__" value="delete"/>
                             <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                         </form>
                     </div>
@@ -76,14 +75,14 @@
         <div class="card p-3" style="border:2px solid #444;">
             <h5>Total: <%= total %> €</h5>
             <form action="<%=request.getContextPath()%>/carrito" method="post">
-                <input type="hidden" name="accion" value="confirmar"/>
+                <input type="hidden" name="__method__" value="confirmar"/>
                 <button type="submit" class="btn btn-success">Confirmar pedido</button>
             </form>
         </div>
     </div>
 </div>
 
+
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

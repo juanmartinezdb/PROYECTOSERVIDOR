@@ -36,15 +36,4 @@ public class Util {
 
     }
 
-    public static Optional<Usuario> autentificacion (Usuario user){
-        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
-        Optional<Usuario> registrado = usuarioDAO.getByPassword(user.getPassword(), user.getNombre());
-        if (registrado.isPresent()) {
-            System.out.println(registrado.get().getNombre()+" encontrado");
-            return registrado;
-        } else {
-            System.out.println("no encontrado");
-            return registrado;
-        }
-    }
 }

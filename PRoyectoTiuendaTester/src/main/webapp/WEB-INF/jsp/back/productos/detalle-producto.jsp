@@ -1,8 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="juan.proyectotienda.model.Producto" %>
 <%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Detalle Producto - Back</title>
@@ -20,13 +21,25 @@
         if (optProd.isPresent()) {
             Producto p = optProd.get();
     %>
-    <h2>Detalle Producto</h2>
-    <p><strong>ID:</strong> <%= p.getIdProducto() %></p>
-    <p><strong>Nombre:</strong> <%= p.getNombre() %></p>
-    <p><strong>Descripción:</strong> <%= p.getDescripcion() %></p>
-    <p><strong>Precio:</strong> <%= p.getPrecio() %> €</p>
-    <p><strong>Imagen:</strong> <%= p.getImagen() %></p>
-    <p><strong>Categoría ID:</strong> <%= p.getIdCategoria() %></p>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <h2><%= p.getNombre() %></h2>
+                <p><strong>ID:</strong> <%= p.getIdProducto() %></p>
+                <p><strong>Descripción:</strong> <%= p.getDescripcion() %></p>
+                <p><strong>Precio:</strong> <%= p.getPrecio() %> €</p>
+                <p><strong>Imagen:</strong> <%= p.getImagen() %></p>
+                <p><strong>Categoría ID:</strong> <%= p.getIdCategoria() %></p>
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <% if (p.getImagen() != null && !p.getImagen().isEmpty()) { %>
+                <img src="<%= request.getContextPath() %>/imagenes/<%= p.getImagen() %>"
+                     alt="<%= p.getNombre() %>" class="img-fluid" style="max-height: 300px;">
+                <% }
+                 %>
+            </div>
+        </div>
+    </div>
 
     <a href="<%=request.getContextPath()%>/back/productos" class="btn btn-primary">Volver</a>
     <%

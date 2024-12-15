@@ -1,8 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="juan.proyectotienda.model.Usuario" %>
 <%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Detalle Usuario - Back</title>

@@ -85,7 +85,7 @@ public class PedidosServlet extends HttpServlet {
         String __method__ = request.getParameter("__method__");
 
         if (__method__ == null) {
-            // Crear
+            // HACERLO PARA METERLE LOS PRODUCTOS ES COMPLICADO, PREGUNTAR SI HAY QUE HACERLO, HACERLO SI DA TIEMPO
             Pedido p = new Pedido();
             p.setIdCliente(Integer.parseInt(request.getParameter("idCliente")));
             p.setFecha(java.time.LocalDate.parse(request.getParameter("fecha")));

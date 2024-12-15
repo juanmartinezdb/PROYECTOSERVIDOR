@@ -1,0 +1,27 @@
+body {
+    background-color: rgb(245, 238, 230);
+}
+header, footer {
+    background-color: rgb(255, 248, 227);
+}
+
+.barranavegacion{
+    background-color: rgb(243, 215, 202);
+
+
+}
+.backbar, ventasbar {
+    background-color: rgb(230, 164, 180);
+
+}
+.categoria-link {
+    padding: 5px 10px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.categoria-link:hover {
+    background-color: #555;
+    border-color: #777;
+}

@@ -1,8 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="juan.proyectotienda.model.Usuario" %>
 <%@ page import="java.util.Optional" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario - Back</title>
@@ -34,9 +35,12 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Rol (cliente/admin):</label>
+
+
+
             <select name="rol" class="form-select">
-                <option value="cliente" <%= "cliente".equals(u.getRol()) ? "selected" : "" %>>cliente</option>
-                <option value="admin" <%= "admin".equals(u.getRol()) ? "selected" : "" %>>admin</option>
+                <option value="cliente" <%="cliente".equals(u.getRol())?"selected":""%>>cliente</option>
+                <option value="admin" <%="admin".equals(u.getRol())?"selected":""%>>admin</option>
             </select>
         </div>
         <button type="submit" class="btn btn-warning">Guardar</button>
@@ -53,6 +57,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

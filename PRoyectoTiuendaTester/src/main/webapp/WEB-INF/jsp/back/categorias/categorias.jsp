@@ -1,8 +1,10 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ page import="java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<%@page import="java.util.Optional"%>
 <%@ page import="juan.proyectotienda.model.Categoria" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Categorías - Back</title>
@@ -28,7 +30,7 @@
         if (listaCategorias != null && !listaCategorias.isEmpty()) {
     %>
     <table class="table table-bordered table-striped table-hover">
-        <thead class="table-dark">
+        <thead class="table-warning">
         <tr>
             <th>ID</th>
             <th>Nombre</th>
@@ -64,13 +66,12 @@
     <%
     } else {
     %>
-    <p>No hay categorías registradas.</p>
+    <p>No hay categorías.</p>
     <%
         }
     %>
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

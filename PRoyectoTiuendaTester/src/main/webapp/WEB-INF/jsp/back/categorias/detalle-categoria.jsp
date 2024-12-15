@@ -1,8 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="java.util.Optional" %>
 <%@ page import="juan.proyectotienda.model.Categoria" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Detalle Categoría - Back</title>
@@ -22,27 +23,16 @@
         if (optCat.isPresent()) {
             Categoria c = optCat.get();
     %>
-    <h2>Detalle Categoría</h2>
-    <div class="mb-3">
-        <label><strong>ID:</strong></label>
-        <span><%= c.getIdCategoria() %></span>
-    </div>
-    <div class="mb-3">
-        <label><strong>Nombre:</strong></label>
-        <span><%= c.getNombre() %></span>
-    </div>
-
-    <a href="<%=request.getContextPath()%>/back/categorias" class="btn btn-primary">Volver</a>
-
+    <h2><%= c.getNombre() %></h2>
+        <p><strong>ID:</strong> <%= c.getIdCategoria() %></p>
     <%
     } else {
     %>
     <p>No se ha encontrado la categoría</p>
-    <a href="<%=request.getContextPath()%>/back/categorias" class="btn btn-primary">Volver</a>
     <%
         }
     %>
-
+    <a href="<%=request.getContextPath()%>/back/categorias" class="btn btn-primary">Volver</a>
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>

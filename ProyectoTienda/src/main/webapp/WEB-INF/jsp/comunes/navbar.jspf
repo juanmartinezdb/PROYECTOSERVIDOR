@@ -1,0 +1,44 @@
+<%@page import="juan.proyectotienda.model.Usuario"%>
+
+<nav class="navbar navbar-expand-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="<%=request.getContextPath()%>/"><img src="<%=request.getContextPath()%>/imagenes/logo.png" alt="LOGO" style="height: 40px;"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommon"
+                aria-controls="navbarCommon" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCommon">
+            <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <%
+                    Usuario userlog = (Usuario) session.getAttribute("usuario");
+                    if (userlog != null && "admin".equals(userlog.getRol())){
+                %>
+                    <a class="btn btn-lg btn-warning me-2" href="<%=request.getContextPath()%>/back/categorias">BACK</a>
+                <%
+                    }
+                %>
+                <a class="btn btn-sm btn-outline-primary me-2" href="<%=request.getContextPath()%>/carrito">Carrito</a>
+
+                <%
+                    if (userlog != null) {
+                %>
+                <span class="me-2">Hola, <%=userlog.getNombre()%></span>
+                <form action="<%=request.getContextPath()%>/login" method="post" class="d-inline">
+                    <input type="hidden" name="__method__" value="logout"/>
+                    <input type="submit" value="Logout" class="btn btn-sm btn-outline-danger me-2"/>
+                </form>
+                <%
+                } else {
+                %>
+                <a class="me-2" href="<%=request.getContextPath()%>/registro">Registrarse</a>
+                <a class="btn btn-sm btn-outline-success" href="<%=request.getContextPath()%>/login">Login</a>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+</nav>

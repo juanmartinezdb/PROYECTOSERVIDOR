@@ -1,0 +1,6 @@
+<div class="container-fluid backbar">
+    <a class="btn btn-dark  btn-outline-warning me-2" href="<%=request.getContextPath()%>/back/categorias">Categorias</a>
+    <a class="btn btn-dark  btn-outline-warning me-2" href="<%=request.getContextPath()%>/back/productos">Productos</a>
+    <a class="btn btn-dark  btn-outline-warning me-2" href="<%=request.getContextPath()%>/back/usuarios">Usuarios</a>
+    <a class="btn btn-dark  btn-outline-warning me-2" href="<%=request.getContextPath()%>/back/pedidos">Pedidos</a>
+</div>

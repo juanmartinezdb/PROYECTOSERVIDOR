@@ -1,8 +1,10 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="juan.proyectotienda.model.Producto" %>
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Productos - Back</title>
@@ -28,7 +30,7 @@
         if (listaProductos != null && !listaProductos.isEmpty()) {
     %>
     <table class="table table-bordered table-striped table-hover">
-        <thead class="table-dark">
+        <thead class="table-warning">
         <tr>
             <th>ID</th>
             <th>Nombre</th>
@@ -75,6 +77,5 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
-<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

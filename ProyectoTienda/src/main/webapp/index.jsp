@@ -1,13 +1,23 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="juan.proyectotienda.model.Categoria" %>
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>JSP - Hello World</title>
+    <meta charset="UTF-8">
+    <title>Index - Tienda Digital</title>
+    <%@ include file="/WEB-INF/jsp/comunes/bootstrap.jspf" %>
+    <%@ include file="/WEB-INF/jsp/comunes/css.jspf" %>
+
 </head>
-<body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<body class="d-flex flex-column vh-100">
+
+<%@ include file="/WEB-INF/jsp/comunes/header.jspf" %>
+<%@ include file="/WEB-INF/jsp/comunes/navbar.jspf" %>
+
+
+<%@ include file="/WEB-INF/jsp/comunes/footer.jspf" %>
+
 </body>
 </html>

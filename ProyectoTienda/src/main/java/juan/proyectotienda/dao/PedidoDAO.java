@@ -1,21 +1,23 @@
 package juan.proyectotienda.dao;
 
 import juan.proyectotienda.model.Pedido;
+import juan.proyectotienda.model.Producto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PedidoDAO {
-    public void create(Pedido pedido);
-    public List<Pedido> getAll();
-    public Optional<Pedido> find(int id);
-    public void update(Pedido pedido);
-    public void delete(int id);
+    void create(Pedido pedido);
+    List<Pedido> getAll();
+    Optional<Pedido> find(int id);
+    void update(Pedido pedido);
+    void delete(int id);
 
-    //no se si en update hacer esto o tener metodos diferentes
-    //agregar articulo al pedido?
-    //eliminar articulo del pedido?
-    //modificar cantidad de articulos de un pedido?
+    // cfear el pedido con los articulos
+    void createConArticulos(Pedido pedido, List<Producto> productos, List<Integer> cantidades);
 
-
+    //para pillar lo de articulos
+    List<Producto> getProductosDePedido(int idPedido);
+    List<Integer> getCantidadesDePedido(int idPedido);
+    List<Pedido> getPedidosByCliente(int idCliente);
 }

@@ -1,10 +1,11 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="juan.proyectotienda.model.Producto" %>
 <%@ page import="juan.proyectotienda.model.Categoria" %>
-<%@ page import="java.util.*" %>
 <%@ page import="java.util.Optional" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Editar Producto - Back</title>
@@ -40,6 +41,7 @@
             <input type="number" step="0.01" name="precio" class="form-control" value="<%= p.getPrecio() %>" required/>
         </div>
         <div class="mb-3">
+
             <label class="form-label">Imagen:</label>
             <input type="text" name="imagen" class="form-control" value="<%= p.getImagen() %>"/>
         </div>
@@ -49,9 +51,8 @@
                 <%
                     if (listaCategorias != null) {
                         for (Categoria c : listaCategorias) {
-                            String selected = (c.getIdCategoria() == p.getIdCategoria()) ? "selected" : "";
                 %>
-                <option value="<%=c.getIdCategoria()%>" <%=selected%>><%=c.getNombre()%></option>
+                <option value="<%=c.getIdCategoria()%>"<%=(c.getIdCategoria()==p.getIdCategoria())?"selected":"" %>><%=c.getNombre()%></option>
                 <%
                         }
                     }

@@ -1,15 +1,16 @@
 package juan.proyectotienda.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class Pedido {
     private int idPedido;
     private int idCliente;
     private Map<Integer, Integer> articulos; //idProducto, cantidad
-    private Date fecha;
-    private double total;
+    private LocalDate fecha;
+    private BigDecimal total;
 
     public int getIdPedido() {
         return idPedido;
@@ -35,19 +36,19 @@ public class Pedido {
         this.articulos = articulos;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 

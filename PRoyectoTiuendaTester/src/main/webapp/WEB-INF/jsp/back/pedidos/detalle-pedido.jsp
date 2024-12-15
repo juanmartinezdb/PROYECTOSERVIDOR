@@ -1,9 +1,12 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ page import="juan.proyectotienda.model.Pedido"%>
 <%@ page import="juan.proyectotienda.model.Producto"%>
-<%@ page import="java.util.*"%>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="java.util.Optional" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Detalle Pedido - Back</title>
@@ -36,11 +39,11 @@
         if (productosPedido != null && !productosPedido.isEmpty()) {
     %>
     <table class="table table-bordered table-striped table-hover">
-        <thead>
+        <thead class="table-warning">
         <tr>
             <th>Producto</th>
             <th>Cantidad</th>
-            <th>Precio Unitario</th>
+            <th>Precio la unidad</th>
             <th>Subtotal</th>
         </tr>
         </thead>
@@ -49,7 +52,7 @@
             for (int i = 0; i < productosPedido.size(); i++) {
                 Producto pr = productosPedido.get(i);
                 int cant = cantidades.get(i);
-                java.math.BigDecimal subtotal = pr.getPrecio().multiply(new java.math.BigDecimal(cant));
+                BigDecimal subtotal = pr.getPrecio().multiply((BigDecimal.valueOf(cant)));
         %>
         <tr>
             <td><%=pr.getNombre()%></td>
