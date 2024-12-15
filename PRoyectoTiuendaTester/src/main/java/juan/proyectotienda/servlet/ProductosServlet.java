@@ -28,8 +28,23 @@ public class ProductosServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || "/".equals(pathInfo)) {
+            String busqueda = request.getParameter("busqueda");
+            String idCategoriaParam = request.getParameter("idCategoria");
 
-            request.setAttribute("listaProductos", productoDAO.getAll());
+            List<Producto> listaProductos;
+
+            if (busqueda != null && !busqueda.isEmpty()) {
+                listaProductos = productoDAO.findbyNombre(busqueda);
+            } else if (idCategoriaParam != null && !idCategoriaParam.isEmpty()) {
+                int idCategoria = Integer.parseInt(idCategoriaParam);
+                listaProductos = productoDAO.findbyCategoria(idCategoria);
+            } else {
+                listaProductos = productoDAO.getAll();
+            }
+
+            request.setAttribute("listaProductos", listaProductos);
+            request.setAttribute("listaCategorias", categoriaDAO.getAll());
+
             dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/productos.jsp");
 
         } else {
@@ -44,8 +59,8 @@ public class ProductosServlet extends HttpServlet {
             } else if (pathParts.length == 2) {
                 // Detalle
                 try {
-                        request.setAttribute("producto", productoDAO.find(Integer.parseInt(pathParts[1])));
-                        dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/detalle-producto.jsp");
+                    request.setAttribute("producto", productoDAO.find(Integer.parseInt(pathParts[1])));
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/detalle-producto.jsp");
 
                 } catch (NumberFormatException nfe) {
                     nfe.printStackTrace();
@@ -55,9 +70,9 @@ public class ProductosServlet extends HttpServlet {
             } else if (pathParts.length == 3 && "editar".equals(pathParts[1])) {
                 // /categorias/editar/{id}
                 try {
-                        request.setAttribute("listaCategorias", categoriaDAO.getAll());
-                        request.setAttribute("producto", productoDAO.find(Integer.parseInt(pathParts[2])));
-                        dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/editar-producto.jsp");
+                    request.setAttribute("listaCategorias", categoriaDAO.getAll());
+                    request.setAttribute("producto", productoDAO.find(Integer.parseInt(pathParts[2])));
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/productos/editar-producto.jsp");
 
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
@@ -86,10 +101,10 @@ public class ProductosServlet extends HttpServlet {
             p.setImagen(request.getParameter("imagen"));
             p.setIdCategoria(Integer.parseInt(request.getParameter("idCategoria")));
             productoDAO.create(p);
-    //actualizar
+            //actualizar
         } else if ("put".equalsIgnoreCase(__method__)) {
             doPut(request, response);
-        //borrar
+            //borrar
         } else if ("delete".equalsIgnoreCase(__method__)) {
             doDelete(request, response);
         }
@@ -99,7 +114,7 @@ public class ProductosServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-            Producto p = new Producto();
+        Producto p = new Producto();
         try {
             p.setIdProducto(Integer.parseInt(request.getParameter("idProducto")));
             p.setNombre(request.getParameter("nombre"));

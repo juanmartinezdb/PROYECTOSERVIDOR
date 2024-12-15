@@ -171,4 +171,75 @@ public class ProductoDAOImpl extends AbstractDAOImpl implements ProductoDAO {
             closeDb(conn, ps, rs);
         }
     }
+
+    @Override
+    public List<Producto> findbyNombre(String nombre) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> lista = new ArrayList<>();
+
+        try {
+            conn = connectDB();
+            ps = conn.prepareStatement("SELECT * FROM producto WHERE nombre LIKE ?");
+            int idx = 1;
+            ps.setString(idx, "%" + nombre + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Producto p = new Producto();
+                idx = 1;
+                p.setIdProducto(rs.getInt(idx++));
+                p.setNombre(rs.getString(idx++));
+                p.setDescripcion(rs.getString(idx++));
+                p.setPrecio(rs.getBigDecimal(idx++));
+                p.setImagen(rs.getString(idx++));
+                p.setIdCategoria(rs.getInt(idx));
+                lista.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(conn, ps, rs);
+        }
+
+        return lista;
+    }
+
+    @Override
+    public List<Producto> findbyCategoria(int idCategoria) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> lista = new ArrayList<>();
+
+        try {
+            conn = connectDB();
+            ps = conn.prepareStatement("SELECT * FROM producto WHERE idCategoria = ?");
+            int idx = 1;
+            ps.setInt(idx, idCategoria);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Producto p = new Producto();
+                p.setIdProducto(rs.getInt(idx++));
+                p.setNombre(rs.getString(idx++));
+                p.setDescripcion(rs.getString(idx++));
+                p.setPrecio(rs.getBigDecimal(idx++));
+                p.setImagen(rs.getString(idx++));
+                p.setIdCategoria(rs.getInt(idx));
+                lista.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(conn, ps, rs);
+        }
+
+        return lista;
+    }
 }

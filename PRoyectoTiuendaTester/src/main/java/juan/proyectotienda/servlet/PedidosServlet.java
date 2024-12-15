@@ -43,14 +43,14 @@ public class PedidosServlet extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/pedidos/crear-pedido.jsp");
 
             } else if (pathParts.length == 2) {
-    //Pedidos/{id}
+                //Pedidos/{id}
                 try {
 
                     int id = Integer.parseInt(pathParts[1]);
-                        request.setAttribute("pedido",pedidoDAO.find(id));
-                        request.setAttribute("productosPedido", pedidoDAO.getProductosDePedido(id));
-                        request.setAttribute("cantidadesPedido", pedidoDAO.getCantidadesDePedido(id));
-                        dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/pedidos/detalle-pedido.jsp");
+                    request.setAttribute("pedido",pedidoDAO.find(id));
+                    request.setAttribute("productosPedido", pedidoDAO.getProductosDePedido(id));
+                    request.setAttribute("cantidadesPedido", pedidoDAO.getCantidadesDePedido(id));
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/pedidos/detalle-pedido.jsp");
                     System.out.println("ENTRA PEDIDO");
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
@@ -62,8 +62,8 @@ public class PedidosServlet extends HttpServlet {
                 // /categorias/editar/{id}
                 try {
 
-                        request.setAttribute("pedido", pedidoDAO.find(Integer.parseInt(pathParts[2])));
-                        dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/pedidos/editar-pedido.jsp");
+                    request.setAttribute("pedido", pedidoDAO.find(Integer.parseInt(pathParts[2])));
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/back/pedidos/editar-pedido.jsp");
 
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
@@ -109,11 +109,11 @@ public class PedidosServlet extends HttpServlet {
         Pedido p = new Pedido();
 
         try {
-        p.setIdPedido(Integer.parseInt(request.getParameter("idPedido")));
-        p.setIdCliente(Integer.parseInt(request.getParameter("idCliente")));
-        p.setFecha(java.time.LocalDate.parse(request.getParameter("fecha")));
-        p.setTotal(new java.math.BigDecimal(request.getParameter("total")));
-        pedidoDAO.update(p);
+            p.setIdPedido(Integer.parseInt(request.getParameter("idPedido")));
+            p.setIdCliente(Integer.parseInt(request.getParameter("idCliente")));
+            p.setFecha(java.time.LocalDate.parse(request.getParameter("fecha")));
+            p.setTotal(new java.math.BigDecimal(request.getParameter("total")));
+            pedidoDAO.update(p);
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -123,10 +123,10 @@ public class PedidosServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    RequestDispatcher dispatcher;
+        RequestDispatcher dispatcher;
 
         try {
-        pedidoDAO.delete(Integer.parseInt(request.getParameter("idPedido")));
+            pedidoDAO.delete(Integer.parseInt(request.getParameter("idPedido")));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

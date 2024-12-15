@@ -30,7 +30,6 @@ public class VentasServlet extends HttpServlet {
         RequestDispatcher dispatcher;
         String pathInfo = request.getPathInfo();
 
-        //preguntar si es de marqueses declarar aqui las listas en lugar de en cada parte del codigo, es mas limpio que repetirlo pero tal vez innecesario.
         List<Categoria> categorias = categoriaDAO.getAll();
         List<Producto> todosProductos = productoDAO.getAll();
         request.setAttribute("listaCategorias", categorias);

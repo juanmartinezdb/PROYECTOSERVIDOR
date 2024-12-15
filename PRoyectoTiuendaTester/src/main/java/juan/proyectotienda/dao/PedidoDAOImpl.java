@@ -304,4 +304,5 @@ public class PedidoDAOImpl extends AbstractDAOImpl implements PedidoDAO {
 
         return cantidades;
     }
+
 }
